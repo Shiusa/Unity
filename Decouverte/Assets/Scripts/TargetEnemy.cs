@@ -20,7 +20,7 @@ public class TargetEnemy : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag=="enemy")
+        if (other.gameObject.tag=="Enemy")
         {
             targets.Add(other.gameObject);
         }
@@ -28,7 +28,7 @@ public class TargetEnemy : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag=="enemy")
+        if (other.gameObject.tag=="Enemy")
         {
             if (targets.Contains(other.gameObject))
             {
