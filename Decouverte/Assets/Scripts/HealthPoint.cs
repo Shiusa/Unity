@@ -5,15 +5,16 @@ using UnityEngine;
 public class HealthPoint : MonoBehaviour
 {
     [SerializeField]
+    private int _healthPoints;
     public int healthPoints
     {
         get
         {
-            return healthPoints;
+            return _healthPoints;
         }
         set
         {
-            healthPoints = value;
+            _healthPoints = value;
             Debug.Log("Je viens de me faire tierer dessus, voici mes pv: " + healthPoints);
             SomeValueChangedFunction(healthPoints, value);
         }
