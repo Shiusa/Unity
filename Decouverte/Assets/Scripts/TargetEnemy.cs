@@ -6,15 +6,16 @@ public class TargetEnemy : MonoBehaviour
 {
 
     List<GameObject> targets = new List<GameObject>();
-    bool alreadyShooting = false;
+    bool isShooting = false;
     bool corountineIsRunning = false;
     public Transform teteTourelle;
     //GameObject currentTarget;
+    public GameObject bulletPrefab;
 
     private void Start()
     {
         corountineIsRunning=true;
-        StartCoroutine(ShotTheEnemy());
+        //StartCoroutine(ShotTheEnemy());
         StartCoroutine(LookAtEnemy());
     }
 
@@ -23,6 +24,10 @@ public class TargetEnemy : MonoBehaviour
         if (other.gameObject.tag=="Enemy")
         {
             targets.Add(other.gameObject);
+            if (!isShooting)
+            {
+                StartCoroutine(ShotTheEnemy());
+            }
         }
     }
 
@@ -34,21 +39,35 @@ public class TargetEnemy : MonoBehaviour
             {
                 targets.Remove(other.gameObject);
             }
+
+            if (targets.Count==0)
+            {
+                isShooting = false;
+            }
         }
     }
 
     public IEnumerator ShotTheEnemy()
     {
+        isShooting = true;
         while (corountineIsRunning)
         {
-            if(targets.Count>0)
+            while(targets.Count>0)
             {
-
-                targets[0].GetComponent<HealthPoint>().healthPoints -= 10;
-                yield return new WaitForSeconds(1);
+                if (targets[0] != null)
+                {
+                    // Créer une balle
+                    GameObject bullet = Instantiate(bulletPrefab, teteTourelle.position, Quaternion.identity);
+                    // Définir la cible pour la balle
+                    bullet.GetComponent<BulletMovement>().SetTarget(targets[0].transform);
+                    // Infliger des dégâts à l'ennemi
+                    //targets[0].GetComponent<HealthPoint>().healthPoints -= 10;
+                    yield return new WaitForSeconds(1f);
+                }
             }
             yield return null;
         }
+        isShooting = false;
     }
 
     public IEnumerator LookAtEnemy()
