@@ -11,9 +11,13 @@ public class TargetEnemy : MonoBehaviour
     public Transform teteTourelle;
     //GameObject currentTarget;
     public GameObject bulletPrefab;
+    private Animator animator;
+    private AudioSource audioSource;
 
     private void Start()
     {
+        animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
         corountineIsRunning=true;
         //StartCoroutine(ShotTheEnemy());
         StartCoroutine(LookAtEnemy());
@@ -56,13 +60,18 @@ public class TargetEnemy : MonoBehaviour
             {
                 if (targets[0] != null)
                 {
+                    
+                    audioSource.Play();
                     // Créer une balle
                     GameObject bullet = Instantiate(bulletPrefab, teteTourelle.position, Quaternion.identity);
                     // Définir la cible pour la balle
                     bullet.GetComponent<BulletMovement>().SetTarget(targets[0].transform);
+                    animator.SetBool("shoot", true);
                     // Infliger des dégâts à l'ennemi
                     //targets[0].GetComponent<HealthPoint>().healthPoints -= 10;
-                    yield return new WaitForSeconds(1f);
+                    
+                    yield return new WaitForSeconds(3f);
+                    animator.SetBool("shoot", false);
                 }
             }
             yield return null;
